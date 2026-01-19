@@ -46,7 +46,7 @@ public class LanguageModel {
      * Computes and sets the p and cp fields of all the CharData objects in the
      * given list.
      */
-    private void calculateProbabilities(List probs) {
+    public void calculateProbabilities(List probs) {
 
         int total = 0;
         for (int i = 0; i < probs.getSize(); i++) {
@@ -74,7 +74,7 @@ public class LanguageModel {
      * Returns a random character from the given list, according to the
      * cumulative probabilities.
      */
-    private char getRandomChar(List probs) {
+    public char getRandomChar(List probs) {
 
         double r = randomGenerator.nextDouble();
 
