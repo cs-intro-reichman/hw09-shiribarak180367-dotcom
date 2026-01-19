@@ -101,6 +101,43 @@ public class LanguageModel {
      * @param textLength - the size of text to generate (final length)
      * @return the generated text
      */
+    /**
+     * Trains the language model on the given text file.
+     */
+    public void train(String fileName) {
+
+        In in = new In(fileName);
+
+        String window = "";
+        while (window.length() < windowLength && !in.isEmpty()) {
+            window += in.readChar();
+        }
+
+        if (window.length() < windowLength) {
+            return;
+        }
+
+        while (!in.isEmpty()) {
+
+            char c = in.readChar();
+
+            List probs = CharDataMap.get(window);
+
+            if (probs == null) {
+                probs = new List();
+                CharDataMap.put(window, probs);
+            }
+
+            probs.update(c);
+
+            window = window.substring(1) + c;
+        }
+
+        for (List probs : CharDataMap.values()) {
+            calculateProbabilities(probs);
+        }
+    }
+
     public String generate(String initialText, int textLength) {
 
         if (initialText.length() >= textLength) {
@@ -137,6 +174,10 @@ public class LanguageModel {
      */
     public String toString() {
         StringBuilder str = new StringBuilder();
+
+        java.util.ArrayList<String> keys = new java.util.ArrayList<>(CharDataMap.keySet());
+        java.util.Collections.sort(keys);
+
         for (String key : CharDataMap.keySet()) {
             List keyProbs = CharDataMap.get(key);
             str.append(key + " : " + keyProbs + "\n");
