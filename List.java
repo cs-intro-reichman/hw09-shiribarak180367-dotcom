@@ -34,6 +34,7 @@ public class List {
         if (first == null) {
             return null;
         }
+
         return first.cp;
     }
 
@@ -54,6 +55,7 @@ public class List {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
+
         Node curr = first;
         while (curr != null) {
             sb.append(curr.cp.toString());
@@ -62,8 +64,8 @@ public class List {
             }
             curr = curr.next;
         }
-        sb.append(")");
 
+        sb.append(")");
         return sb.toString();
     }
 
@@ -92,7 +94,34 @@ public class List {
      * the given chr to the beginning of this list.
      */
     public void update(char chr) {
+        Node curr = first;
+        while (curr != null) {
+            if (curr.cp.equals(chr)) {
+                curr.cp.count++;
+                return;
+            }
+            curr = curr.next;
+        }
 
+        addLast(chr);
+    }
+
+    private void addLast(char chr) {
+        CharData cd = new CharData(chr);
+        Node newNode = new Node(cd, null);
+
+        if (first == null) {
+            first = newNode;
+            size++;
+            return;
+        }
+
+        Node curr = first;
+        while (curr.next != null) {
+            curr = curr.next;
+        }
+        curr.next = newNode;
+        size++;
     }
 
     /**
