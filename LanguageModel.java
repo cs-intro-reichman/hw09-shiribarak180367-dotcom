@@ -47,12 +47,10 @@ public class LanguageModel {
      * given list.
      */
     public void calculateProbabilities(List probs) {
-
         int total = 0;
         for (int i = 0; i < probs.getSize(); i++) {
             total += probs.get(i).count;
         }
-
         if (total == 0) {
             return;
         }
@@ -65,9 +63,7 @@ public class LanguageModel {
             cd.cp = cumulative;
         }
 
-        if (probs.getSize() > 0) {
-            probs.get(probs.getSize() - 1).cp = 1.0;
-        }
+        probs.get(probs.getSize() - 1).cp = 1.0; // חשוב מאוד
     }
 
     /**
@@ -75,51 +71,16 @@ public class LanguageModel {
      * cumulative probabilities.
      */
     public char getRandomChar(List probs) {
-
         double r = randomGenerator.nextDouble();
 
         for (int i = 0; i < probs.getSize(); i++) {
             CharData cd = probs.get(i);
-            if (cd.cp > r) {
+            if (r <= cd.cp) {
                 return cd.chr;
             }
         }
 
-        return probs.get(probs.getSize() - 1).chr;
-    }
-
-    public void train(String fileName) {
-
-        In in = new In(fileName);
-
-        String window = "";
-        while (window.length() < windowLength && !in.isEmpty()) {
-            window += in.readChar();
-        }
-
-        if (window.length() < windowLength) {
-            return;
-        }
-
-        while (!in.isEmpty()) {
-
-            char c = in.readChar();
-
-            List probs = CharDataMap.get(window);
-
-            if (probs == null) {
-                probs = new List();
-                CharDataMap.put(window, probs);
-            }
-
-            probs.update(c);
-
-            window = window.substring(1) + c;
-        }
-
-        for (List probs : CharDataMap.values()) {
-            calculateProbabilities(probs);
-        }
+        return probs.get(probs.getSize() - 1).chr; // fallback בטיחותי
     }
 
     /**
