@@ -151,27 +151,23 @@ public class LanguageModel {
 
         StringBuilder generated = new StringBuilder(initialText);
 
+        String window = initialText.substring(initialText.length() - windowLength);
+
         while (generated.length() < textLength) {
 
-            String window = generated.toString()
-                    .substring(generated.length() - windowLength);
-
             List probs = CharDataMap.get(window);
-            if (probs == null) {
 
-                return generated.toString().replace('\r', '\n');
+            if (probs == null) {
+                break;
             }
 
             char nextChar = getRandomChar(probs);
-
-            if (nextChar == '\r') {
-                nextChar = '\n';
-            }
-
             generated.append(nextChar);
+
+            window = window.substring(1) + nextChar;
         }
 
-        return generated.toString().replace('\r', '\n');
+        return generated.toString();
     }
 
     /**
