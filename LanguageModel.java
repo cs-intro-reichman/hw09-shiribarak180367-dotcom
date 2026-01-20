@@ -161,15 +161,17 @@ public class LanguageModel {
             }
 
             char nextChar = getRandomChar(probs);
+
+            if (nextChar == '\r') {
+                nextChar = '\n';
+            }
+
             generated.append(nextChar);
 
             window = window.substring(1) + nextChar;
         }
 
-        String out = generated.toString();
-        out = out.replace("\r\n", "\n").replace('\r', '\n');
-
-        return out;
+        return generated.toString();
     }
 
     /**
