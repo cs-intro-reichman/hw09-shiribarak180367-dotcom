@@ -63,7 +63,7 @@ public class LanguageModel {
             cd.cp = cumulative;
         }
 
-        probs.get(probs.getSize() - 1).cp = 1.0; // חשוב מאוד
+        probs.get(probs.getSize() - 1).cp = 1.0;
     }
 
     /**
@@ -75,7 +75,7 @@ public class LanguageModel {
 
         for (int i = 0; i < probs.getSize(); i++) {
             CharData cd = probs.get(i);
-            if (r <= cd.cp) {
+            if (r < cd.cp) {
                 return cd.chr;
             }
         }

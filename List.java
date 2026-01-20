@@ -103,7 +103,7 @@ public class List {
             curr = curr.next;
         }
 
-        addLast(chr);
+        addFirst(chr);
     }
 
     private void addLast(char chr) {
