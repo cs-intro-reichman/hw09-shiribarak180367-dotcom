@@ -156,7 +156,6 @@ public class LanguageModel {
         while (generated.length() < textLength) {
 
             List probs = CharDataMap.get(window);
-
             if (probs == null) {
                 break;
             }
@@ -167,7 +166,10 @@ public class LanguageModel {
             window = window.substring(1) + nextChar;
         }
 
-        return generated.toString();
+        String out = generated.toString();
+        out = out.replace("\r\n", "\n").replace('\r', '\n');
+
+        return out;
     }
 
     /**
