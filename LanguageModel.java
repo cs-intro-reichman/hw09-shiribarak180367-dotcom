@@ -110,7 +110,11 @@ public class LanguageModel {
 
         String window = "";
         while (window.length() < windowLength && !in.isEmpty()) {
-            window += in.readChar();
+            char ch = in.readChar();
+            if (ch == '\r') {
+                continue;
+            }
+            window += ch;
         }
 
         if (window.length() < windowLength) {
@@ -118,11 +122,12 @@ public class LanguageModel {
         }
 
         while (!in.isEmpty()) {
-
             char c = in.readChar();
+            if (c == '\r') {
+                continue;
+            }
 
             List probs = CharDataMap.get(window);
-
             if (probs == null) {
                 probs = new List();
                 CharDataMap.put(window, probs);
@@ -148,15 +153,20 @@ public class LanguageModel {
 
         while (generated.length() < textLength) {
 
-            String window = generated.toString().substring(generated.length() - windowLength);
+            String window = generated.toString()
+                    .substring(generated.length() - windowLength);
 
             List probs = CharDataMap.get(window);
             if (probs == null) {
-
                 return generated.toString();
             }
 
             char nextChar = getRandomChar(probs);
+
+            if (nextChar == '\r') {
+                nextChar = '\n';
+            }
+
             generated.append(nextChar);
         }
 
