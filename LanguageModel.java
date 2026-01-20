@@ -134,7 +134,6 @@ public class LanguageModel {
             }
 
             probs.update(c);
-
             window = window.substring(1) + c;
         }
 
@@ -161,11 +160,6 @@ public class LanguageModel {
             }
 
             char nextChar = getRandomChar(probs);
-
-            if (nextChar == '\r') {
-                nextChar = '\n';
-            }
-
             generated.append(nextChar);
 
             window = window.substring(1) + nextChar;
