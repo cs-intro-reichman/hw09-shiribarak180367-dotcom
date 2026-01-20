@@ -158,7 +158,8 @@ public class LanguageModel {
 
             List probs = CharDataMap.get(window);
             if (probs == null) {
-                return generated.toString();
+
+                return generated.toString().replace('\r', '\n');
             }
 
             char nextChar = getRandomChar(probs);
@@ -170,7 +171,7 @@ public class LanguageModel {
             generated.append(nextChar);
         }
 
-        return generated.toString();
+        return generated.toString().replace('\r', '\n');
     }
 
     /**
