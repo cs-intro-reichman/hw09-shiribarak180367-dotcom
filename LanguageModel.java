@@ -140,30 +140,24 @@ public class LanguageModel {
 
     public String generate(String initialText, int textLength) {
 
-        if (initialText.length() >= textLength) {
-            return initialText.substring(0, textLength);
-        }
-
         if (initialText.length() < windowLength) {
             return initialText;
         }
 
         StringBuilder generated = new StringBuilder(initialText);
 
-        String window = generated.substring(generated.length() - windowLength);
-
         while (generated.length() < textLength) {
+
+            String window = generated.toString().substring(generated.length() - windowLength);
 
             List probs = CharDataMap.get(window);
             if (probs == null) {
-                break;
+
+                return generated.toString();
             }
 
             char nextChar = getRandomChar(probs);
-
             generated.append(nextChar);
-
-            window = generated.substring(generated.length() - windowLength);
         }
 
         return generated.toString();
