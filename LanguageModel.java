@@ -111,9 +111,11 @@ public class LanguageModel {
         String window = "";
         while (window.length() < windowLength && !in.isEmpty()) {
             char ch = in.readChar();
+
             if (ch == '\r') {
-                continue;
+                ch = '\n';
             }
+
             window += ch;
         }
 
@@ -122,18 +124,22 @@ public class LanguageModel {
         }
 
         while (!in.isEmpty()) {
+
             char c = in.readChar();
+
             if (c == '\r') {
-                continue;
+                c = '\n';
             }
 
             List probs = CharDataMap.get(window);
+
             if (probs == null) {
                 probs = new List();
                 CharDataMap.put(window, probs);
             }
 
             probs.update(c);
+
             window = window.substring(1) + c;
         }
 
@@ -154,23 +160,27 @@ public class LanguageModel {
 
         while (generated.length() < textLength) {
 
+            window = window.replace('\r', '\n');
+
             List probs = CharDataMap.get(window);
             if (probs == null) {
                 break;
             }
 
             char nextChar = getRandomChar(probs);
+
+            if (nextChar == '\r') {
+                nextChar = '\n';
+            }
+
             generated.append(nextChar);
 
             window = window.substring(1) + nextChar;
         }
 
-        return generated.toString();
+        return generated.toString().replace('\r', '\n');
     }
 
-    /**
-     * Returns a string representing the map of this language model.
-     */
     public String toString() {
         StringBuilder str = new StringBuilder();
 
